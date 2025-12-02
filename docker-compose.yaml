@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  postgres-company:
+    image: postgres:16.5
+    container_name: postgres-company
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: company_user
+      POSTGRES_PASSWORD: company_pass
+      POSTGRES_DB: company_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - company_pgdata:/var/lib/postgresql/data
+
+  postgres-investor:
+    image: postgres:16.5
+    container_name: postgres-investor
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: investor_user
+      POSTGRES_PASSWORD: investor_pass
+      POSTGRES_DB: investor_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - investor_pgdata:/var/lib/postgresql/data
+
+  postgres-catalog:
+    image: postgres:16.5
+    container_name: postgres-catalog
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: catalog_user
+      POSTGRES_PASSWORD: catalog_pass
+      POSTGRES_DB: catalog_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - catalog_pgdata:/var/lib/postgresql/data
+
+  postgres-request:
+    image: postgres:16.5
+    container_name: postgres-request
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: request_user
+      POSTGRES_PASSWORD: request_pass
+      POSTGRES_DB: request_db
+    ports:
+      - "5436:5432"
+    volumes:
+      - request_pgdata:/var/lib/postgresql/data
+
+volumes:
+  company_pgdata:
+  investor_pgdata:
+  catalog_pgdata:
+  request_pgdata:

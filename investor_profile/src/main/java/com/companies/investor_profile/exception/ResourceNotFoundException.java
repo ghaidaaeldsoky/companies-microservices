@@ -1,0 +1,8 @@
+package com.companies.investor_profile.exception;
+public class ResourceNotFoundException extends RuntimeException {
+
+    public ResourceNotFoundException(String message) {
+        super(message);
+    }
+    
+}

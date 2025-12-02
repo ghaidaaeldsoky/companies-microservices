@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5434/investor_db
+    username: investor_user
+    password: investor_pass
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  application:
+    name: investor-profile-service
+
+server:
+  port: 8082
+
+logging:
+  level:
+    root: INFO
+    com.companies: DEBUG    # adjust to your base package

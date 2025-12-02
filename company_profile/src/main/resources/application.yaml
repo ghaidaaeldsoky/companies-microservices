@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/company_db
+    username: company_user
+    password: company_pass
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  application:
+    name: company-profile-service
+
+server:
+  port: 8081
