@@ -145,7 +145,7 @@ public class ServiceRequest {
         lastUpdatedAt = now;
 
         if (status == null) {
-            status = ServiceRequestStatus.DRAFT;
+            status = ServiceRequestStatus.SUBMITTED;
         }
         if (deliverablePreference == null) {
             deliverablePreference = DeliverablePreference.DIGITAL;
