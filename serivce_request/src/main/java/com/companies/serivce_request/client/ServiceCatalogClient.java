@@ -4,6 +4,9 @@ import com.companies.serivce_request.api.ApiResponse;
 import com.companies.serivce_request.client.dto.ServiceCatalogServiceResponse;
 
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.HttpClientErrorException;
@@ -22,17 +25,12 @@ public class ServiceCatalogClient {
     }
 
     public ServiceCatalogServiceResponse getServiceById(UUID serviceId) {
-        // try {
-        //     return restClient.get()
-        //             .uri("/api/services/{id}", serviceId)
-        //             .retrieve()
-        //             .body(ServiceCatalogServiceResponse.class);
-        // } catch (HttpClientErrorException.NotFound ex) {
-        //     return null;
-        // }
+        
         try {
+            String token = getCurrentJwtToken();
             ApiResponse<ServiceCatalogServiceResponse> response = restClient.get()
                     .uri("/api/services/{id}", serviceId)
+                    .headers(headers -> headers.setBearerAuth(token))
                     .retrieve()
                     .body(new ParameterizedTypeReference<ApiResponse<ServiceCatalogServiceResponse>>() {});
 
@@ -44,5 +42,15 @@ public class ServiceCatalogClient {
         } catch (HttpClientErrorException.NotFound ex) {
             return null;
         }
+    }
+
+    private String getCurrentJwtToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            return jwtAuth.getToken().getTokenValue();
+        }
+
+        throw new IllegalStateException("No JWT token found in SecurityContext – is this endpoint protected?");
     }
 }
