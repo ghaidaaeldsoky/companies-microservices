@@ -12,6 +12,19 @@ spring:
         format_sql: true
   application:
     name: company-profile-service
+  security:
+      oauth2:
+        resourceserver:
+          jwt:
+            issuer-uri: http://keycloak:8180/realms/master
+            jwk-set-uri: http://keycloak:8180/realms/master/protocol/openid-connect/certs
+
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.web: DEBUG
 
 server:
   port: 8081
