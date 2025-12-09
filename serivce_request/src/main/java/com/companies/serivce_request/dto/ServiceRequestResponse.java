@@ -28,7 +28,7 @@ public record ServiceRequestResponse(
         InspectionStatus inspectionStatus,
         String inspectionReference,
 
-        BigDecimal totalFeesAmount,
+        Double totalFeesAmount,
         String serviceFeesJson,
         Boolean feesApproved,
 

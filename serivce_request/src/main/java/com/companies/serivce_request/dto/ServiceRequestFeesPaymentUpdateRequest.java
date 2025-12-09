@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 public record ServiceRequestFeesPaymentUpdateRequest(
-        BigDecimal totalFeesAmount,
+        Double totalFeesAmount,
         String serviceFeesJson,
         Boolean feesApproved,
 

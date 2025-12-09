@@ -9,6 +9,7 @@ import com.companies.serivce_request.repository.ServiceRequestRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,6 +56,10 @@ public class ServiceRequestService {
         entity.setEligibilityRequired(Boolean.TRUE.equals(svc.eligibilityRequired()));
         entity.setAccessRightsRequired(Boolean.TRUE.equals(svc.accessRightsRequired()));
         entity.setInspectionRequired(Boolean.TRUE.equals(svc.defaultInspectionRequired()));
+
+        // Fees Amount
+        entity.setTotalFeesAmount(BigDecimal.valueOf(req.totalFeesAmount()));
+        entity.setFeesApproved(true);
 
         // Owning agency as default primary agency
         entity.setPrimaryAgencyId(svc.owningAgencyId());
@@ -158,7 +163,7 @@ public class ServiceRequestService {
                 .orElseThrow(() -> new ResourceNotFoundException("Service request not found: " + id));
 
         if (req.totalFeesAmount() != null) {
-            entity.setTotalFeesAmount(req.totalFeesAmount());
+            entity.setTotalFeesAmount(BigDecimal.valueOf(req.totalFeesAmount()));
         }
         if (req.serviceFeesJson() != null) {
             entity.setServiceFeesJson(req.serviceFeesJson());
@@ -228,7 +233,7 @@ public class ServiceRequestService {
                 e.isInspectionRequired(),
                 e.getInspectionStatus(),
                 e.getInspectionReference(),
-                e.getTotalFeesAmount(),
+                e.getTotalFeesAmount().doubleValue(),
                 e.getServiceFeesJson(),
                 e.getFeesApproved(),
                 e.getPaymentStatus(),
