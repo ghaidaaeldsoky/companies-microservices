@@ -35,8 +35,10 @@ public class ServiceRequestService {
         Long companyLong = Long.parseLong(req.companyId());
 
         // 1) Get service config from Service Catalog (sync)
-       
+        
         ServiceCatalogServiceResponse svc = serviceCatalogClient.getServiceById(serviceuuid);
+
+        System.out.println("Response == "+ svc );
         if (svc == null || Boolean.FALSE.equals(svc.active())) {
             throw new ResourceNotFoundException("Service not found or inactive: " + req.serviceId());
         }
@@ -63,7 +65,7 @@ public class ServiceRequestService {
         );
         entity.setDeliverableAddress(req.deliverableAddress());
 
-        entity.setStatus(ServiceRequestStatus.DRAFT);
+        entity.setStatus(ServiceRequestStatus.SUBMITTED);
 
         ServiceRequest saved = repository.save(entity);
         return toResponse(saved);
@@ -92,7 +94,7 @@ public class ServiceRequestService {
         );
         entity.setDeliverableAddress(req.deliverableAddress());
 
-        entity.setStatus(ServiceRequestStatus.DRAFT);
+        entity.setStatus(ServiceRequestStatus.SUBMITTED);
 
         ServiceRequest saved = repository.save(entity);
         return toResponse(saved);
