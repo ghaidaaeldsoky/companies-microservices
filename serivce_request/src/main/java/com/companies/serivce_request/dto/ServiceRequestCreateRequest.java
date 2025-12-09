@@ -27,6 +27,7 @@ public record ServiceRequestCreateRequest(
         Boolean inspectionRequired,
 
         UUID primaryAgencyId,
+        Double totalFeesAmount,
 
         String secondaryAgenciesJson,   // optional JSON text
         String requiredDataIdsJson,     // optional JSON text

@@ -24,7 +24,8 @@ public record ServiceRequestSmartCreateRequest(
         String companyId,
 
         DeliverablePreference deliverablePreference,
-        String deliverableAddress
+        String deliverableAddress,
+        Double totalFeesAmount
 ) {
     
 }

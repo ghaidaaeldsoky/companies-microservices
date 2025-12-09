@@ -56,6 +56,10 @@ public class ServiceRequestService {
         entity.setAccessRightsRequired(Boolean.TRUE.equals(svc.accessRightsRequired()));
         entity.setInspectionRequired(Boolean.TRUE.equals(svc.defaultInspectionRequired()));
 
+        // Fees Amount
+        entity.setTotalFeesAmount(req.totalFeesAmount());
+        entity.setFeesApproved(true);
+
         // Owning agency as default primary agency
         entity.setPrimaryAgencyId(svc.owningAgencyId());
 

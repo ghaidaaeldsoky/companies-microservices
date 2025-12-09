@@ -72,8 +72,8 @@ public class ServiceRequest {
     private String inspectionReference;
 
     // Fees & Payment
-    @Column(name = "total_fees_amount", precision = 18, scale = 2)
-    private BigDecimal totalFeesAmount;
+    @Column(name = "total_fees_amount")
+    private Double totalFeesAmount;
 
     @Column(name = "service_fees", columnDefinition = "text")
     private String serviceFeesJson; // JSON describing items
