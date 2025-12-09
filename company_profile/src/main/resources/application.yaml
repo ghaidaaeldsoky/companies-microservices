@@ -25,6 +25,8 @@ logging:
     org.springframework.security: DEBUG
     org.springframework.security.oauth2: DEBUG
     org.springframework.web: DEBUG
+    root: INFO
+    com.companies: DEBUG    # adjust to your base package
 
 server:
   port: 8081

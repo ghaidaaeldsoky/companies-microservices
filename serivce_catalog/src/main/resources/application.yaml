@@ -12,11 +12,21 @@ spring:
         format_sql: true
   application:
     name: service-catalog-service
+  security:
+      oauth2:
+        resourceserver:
+          jwt:
+            issuer-uri: http://keycloak:8180/realms/gov
+            jwk-set-uri: http://keycloak:8180/realms/gov/protocol/openid-connect/certs
 
-server:
-  port: 8083
 
 logging:
   level:
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.web: DEBUG
     root: INFO
     com.companies: DEBUG    # adjust to your base package
+
+server:
+  port: 8083

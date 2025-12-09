@@ -14,13 +14,25 @@ spring:
   application:
     name: service-request
 
-server:
-  port: 8084
+  security:
+      oauth2:
+        resourceserver:
+          jwt:
+            issuer-uri: http://keycloak:8180/realms/gov
+            jwk-set-uri: http://keycloak:8180/realms/gov/protocol/openid-connect/certs
+
 
 logging:
   level:
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.web: DEBUG
     root: INFO
-    com.companies.serivce_request: DEBUG
+    com.companies: DEBUG    # adjust to your base package
+
+server:
+  port: 8084
+
 services:
   serviceCatalog:
     baseUrl: http://localhost:8083
