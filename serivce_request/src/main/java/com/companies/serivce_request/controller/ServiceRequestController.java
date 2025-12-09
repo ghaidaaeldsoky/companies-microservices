@@ -34,7 +34,7 @@ public class ServiceRequestController {
     // CREATE With Catalog service
     @PostMapping("/rest")
     public ResponseEntity<ApiResponse<ServiceRequestResponse>> createFromCatalog(
-            @Valid @RequestBody ServiceRequestCreateRequest req
+            @Valid @RequestBody ServiceRequestSmartCreateRequest req
     ) {
         ServiceRequestResponse response = service.createFromCatalog(req);
         return ResponseEntity.status(201)

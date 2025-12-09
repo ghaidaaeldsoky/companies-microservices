@@ -20,7 +20,7 @@ public record ServiceRequestCreateRequest(
         String egyid,
 
         UUID investorId,
-        UUID companyId,
+        String companyId,
 
         Boolean eligibilityRequired,
         Boolean accessRightsRequired,

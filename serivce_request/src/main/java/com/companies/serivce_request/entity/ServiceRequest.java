@@ -33,7 +33,7 @@ public class ServiceRequest {
     private UUID investorId;
 
     @Column(name = "company_id")
-    private UUID companyId;
+    private Long companyId;
 
     // Eligibility & Access Rights
     @Column(name = "eligibility_required", nullable = false)

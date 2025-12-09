@@ -11,7 +11,7 @@ public record ServiceRequestResponse(
         String userId,
         String egyid,
         UUID investorId,
-        UUID companyId,
+        Long companyId,
 
         boolean eligibilityRequired,
         Boolean eligibilityApproved,

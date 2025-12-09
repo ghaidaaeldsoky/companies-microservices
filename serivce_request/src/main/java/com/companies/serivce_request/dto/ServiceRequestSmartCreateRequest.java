@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 
 public record ServiceRequestSmartCreateRequest(
      @NotNull
-        UUID serviceId,
+        String serviceId,
 
         @NotBlank
         @Size(max = 100)
@@ -20,8 +20,8 @@ public record ServiceRequestSmartCreateRequest(
         @Size(max = 20)
         String egyid,
 
-        UUID investorId,
-        UUID companyId,
+        String investorId,
+        String companyId,
 
         DeliverablePreference deliverablePreference,
         String deliverableAddress

@@ -27,21 +27,27 @@ public class ServiceRequestService {
     // Create with calling service catalog service
 
      // CREATE DRAFT
-    public ServiceRequestResponse createFromCatalog(ServiceRequestCreateRequest req) {
+    public ServiceRequestResponse createFromCatalog(ServiceRequestSmartCreateRequest req) {
+
+        // Convert req strings to UUID and Long
+        UUID serviceuuid = UUID.fromString(req.serviceId());
+        UUID investorUuid = UUID.fromString(req.investorId());
+        Long companyLong = Long.parseLong(req.companyId());
 
         // 1) Get service config from Service Catalog (sync)
-        ServiceCatalogServiceResponse svc = serviceCatalogClient.getServiceById(req.serviceId());
+       
+        ServiceCatalogServiceResponse svc = serviceCatalogClient.getServiceById(serviceuuid);
         if (svc == null || Boolean.FALSE.equals(svc.active())) {
             throw new ResourceNotFoundException("Service not found or inactive: " + req.serviceId());
         }
 
         // 2) Build entity
         ServiceRequest entity = new ServiceRequest();
-        entity.setServiceId(req.serviceId());
+        entity.setServiceId(serviceuuid);
         entity.setUserId(req.userId());
         entity.setEgyid(req.egyid());
-        entity.setInvestorId(req.investorId());
-        entity.setCompanyId(req.companyId());
+        entity.setInvestorId(investorUuid);
+        entity.setCompanyId(companyLong);
 
         // Flags copied from Service Catalog
         entity.setEligibilityRequired(Boolean.TRUE.equals(svc.eligibilityRequired()));
@@ -71,7 +77,7 @@ public class ServiceRequestService {
         entity.setUserId(req.userId());
         entity.setEgyid(req.egyid());
         entity.setInvestorId(req.investorId());
-        entity.setCompanyId(req.companyId());
+        entity.setCompanyId(Long.parseLong(req.companyId()));
 
         entity.setEligibilityRequired(Boolean.TRUE.equals(req.eligibilityRequired()));
         entity.setAccessRightsRequired(Boolean.TRUE.equals(req.accessRightsRequired()));
