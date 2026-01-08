@@ -216,3 +216,85 @@ curl -X POST http://localhost:8084/api/requests \
 | Company Profile  | 8081 |
 | Service Catalog  | 8083 |
 | Service Request  | 8084 |
+
+---
+## 🔐 Authentication & Keycloak Integration
+
+All backend services in this project are secured using **Keycloak** and **JWT bearer tokens**.
+
+### Keycloak Setup
+
+- **Realm:** `gov`
+- **Issuer URI (OIDC):**  
+  `http://keycloak:8180/realms/gov`
+- **Tested confidential clients (one per service):**
+  - `company-profile-client`
+  - `investor-profile-client`
+  - `service-catalog-client`
+  - `service-req-client`
+
+Each of these clients is:
+
+- Type: **OpenID Connect**
+- **Confidential** (client authentication enabled)
+- **Direct Access Grants** enabled (for testing with Postman using username/password)
+- (Optional) **Service accounts** can be enabled later for machine-to-machine calls.
+
+> 💡 From inside the Docker network, services talk to Keycloak via `http://keycloak:8180`.  
+> From your host (Postman / browser), you typically reach it via `http://localhost:8180` (depending on your `docker-compose` ports).
+
+---
+
+### 🧪 How to Test Authentication with Postman
+#### 1️⃣ Get an Access Token from Keycloak
+
+Use any of the tested clients, e.g. service-req-client or company-profile-client.
+You must also have a user created in the gov realm.
+#### Request
+
+- **Method:** `POST`
+- **URL (from host):**
+```bash
+http://localhost:8180/realms/gov/protocol/openid-connect/token
+```
+(If you call from inside the Docker network, use `http://keycloak:8180/...` instead)
+
+**Body:** `x-www-form-urlencoded`:
+
+| Key           | Value                    |
+| ------------- | ------------------------ |
+| grant_type    | password                 |
+| client_id     | service-req-client       |
+| client_secret | -client secret-          |
+| username      | -keycloak username-      |
+| password      | -keycloak user password- |
+
+#### Response (example)
+```bash
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9....",
+  "expires_in": 300,
+  "refresh_token": "....",
+  "token_type": "Bearer",
+  ...
+}
+```
+Copy the value of `access_token`.
+
+---
+#### 2️⃣ Call Any Secured Service Endpoint
+#### Example: company-profile test endpoint:
+- **Method:** `GET`
+- **URL:**
+```bash
+http://localhost:8081/api/companies
+```
+(Adjust port/path according to the service)
+
+- **Headers:**
+
+| Header        | Value                            |
+| ------------- | -------------------------------- |
+| Authorization | Bearer -paste-access-token-here- |
+
+- If you remove the Authorization header, you should get: `401 Unauthorized`
