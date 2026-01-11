@@ -42,6 +42,144 @@ Each service runs independently and communicates through REST using configurable
 - **Docker Compose**
 
 ---
+
+## ▶️ How to Run the Platform (Local Development)
+
+### 1️⃣ Prerequisites
+
+Make sure you have the following installed:
+
+* Java 21
+* Maven 3.9+
+* Docker
+* Docker Compose
+
+Verify:
+
+```bash
+java -version
+mvn -version
+docker -v
+docker-compose -v
+```
+
+---
+
+### 2️⃣ Start Databases (PostgreSQL – Docker)
+
+All databases are containerized using **Docker Compose** (database-per-service).
+
+From the project root (where `docker-compose.yml` exists):
+
+```bash
+docker-compose up --build
+```
+
+This will start the following containers:
+
+| Service DB      | Container Name    | Host Port | DB Name     |
+| --------------- | ----------------- | --------- | ----------- |
+| Company         | postgres-company  | 5433      | company_db  |
+| Investor        | postgres-investor | 5434      | investor_db |
+| Catalog         | postgres-catalog  | 5435      | catalog_db  |
+| Service Request | postgres-request  | 5436      | request_db  |
+
+> 💡 Data is persisted using Docker volumes (`company_pgdata`, `investor_pgdata`, etc.)
+
+To stop containers:
+
+```bash
+docker-compose down
+```
+
+---
+
+### 3️⃣ Run Microservices (Spring Boot)
+
+Each microservice runs independently.
+
+> ⚠️ **Important:** Make sure Docker databases are running before starting services.
+
+---
+
+#### 🧩 Investor Profile Service
+
+```bash
+cd investor-profile-service
+mvn clean spring-boot:run
+```
+
+Runs on:
+
+```
+http://localhost:8082
+```
+
+---
+
+#### 🏢 Company Profile Service
+
+```bash
+cd company-profile-service
+mvn clean spring-boot:run
+```
+
+Runs on:
+
+```
+http://localhost:8081
+```
+
+---
+
+#### 📚 Service Catalog Service
+
+```bash
+cd service-catalog-service
+mvn clean spring-boot:run
+```
+
+Runs on:
+
+```
+http://localhost:8083
+```
+
+---
+
+#### 📝 Service Request Service (Core Orchestrator)
+
+```bash
+cd service-request-service
+mvn clean spring-boot:run
+```
+
+Runs on:
+
+```
+http://localhost:8084
+```
+
+---
+
+### 4️⃣ Access Services Summary
+
+| Service          | Port |
+| ---------------- | ---- |
+| Investor Profile | 8082 |
+| Company Profile  | 8081 |
+| Service Catalog  | 8083 |
+| Service Request  | 8084 |
+
+---
+## 🧪 Postman Collection
+
+A ready-to-use Postman collection is included for all services.
+
+* **Collection:** [postman/Microservices-POC.postman_collection](https://www.postman.com/ghaidaaeldsoky/workspace/companies-workspace/collection/20573921-b1e202b5-a57c-4557-aecb-ab6fb23fba65?action=share&creator=20573921)
+
+---
+
 ## 🗂️ Microservices
 ### 🧩 1. Investor Profile Service
 
@@ -209,24 +347,15 @@ curl -X POST http://localhost:8084/api/requests \
 ```
 
 ---
-### Access services
-| Service          | Port |
-| ---------------- | ---- |
-| Investor Profile | 8082 |
-| Company Profile  | 8081 |
-| Service Catalog  | 8083 |
-| Service Request  | 8084 |
-
----
 ## 🔐 Authentication & Keycloak Integration
 
 All backend services in this project are secured using **Keycloak** and **JWT bearer tokens**.
 
 ### Keycloak Setup
 
-- **Realm:** `gov`
+- **Realm:** `master`
 - **Issuer URI (OIDC):**  
-  `http://keycloak:8180/realms/gov`
+  `http://keycloak:8180/realms/master`
 - **Tested confidential clients (one per service):**
   - `company-profile-client`
   - `investor-profile-client`
@@ -255,7 +384,7 @@ You must also have a user created in the gov realm.
 - **Method:** `POST`
 - **URL (from host):**
 ```bash
-http://localhost:8180/realms/gov/protocol/openid-connect/token
+http://localhost:8180/realms/master/protocol/openid-connect/token
 ```
 (If you call from inside the Docker network, use `http://keycloak:8180/...` instead)
 
@@ -264,7 +393,7 @@ http://localhost:8180/realms/gov/protocol/openid-connect/token
 | Key           | Value                    |
 | ------------- | ------------------------ |
 | grant_type    | password                 |
-| client_id     | service-req-client       |
+| client_id     | jbpm-client              |
 | client_secret | -client secret-          |
 | username      | -keycloak username-      |
 | password      | -keycloak user password- |
